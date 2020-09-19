@@ -1,18 +1,19 @@
-const modelCounter = function modelCounter(n) {
+//Создание модели
+const modelCounter = function(n) {
   this.counter = n
 }
 
-modelCounter.prototype.getCounter = function getCounter(type, fn) {
+modelCounter.prototype.getCounter = function(type, fn) {
   type && (type === 'increaseCount' ? ++this.counter :  --this.counter)
   fn(this.counter)
 }
 
-const viewCounter = function viewCounter(el) {
+const viewCounter = function (el) {
   this.el = el
   this.onClick = null
 }
 
-viewCounter.prototype.render = function render(data) {
+viewCounter.prototype.render = function(data) {
   this.el.innerHTML = '<h3>Counter:</h3>' +
     '<p>' + data.counter + '</p>' +
     '<button id="decreaseCount" data-type="decreaseCount" class="decrease button" >-</button> ' +
@@ -25,27 +26,25 @@ viewCounter.prototype.render = function render(data) {
   decreaseCount.addEventListener('click', this.onClick);
 }
 
-const controllerCounter = function controllerCounter(view, model) {
+const controllerCounter = function(view, model) {
   this.viewCounter = view
   this.modelCounter = model
 }
 
-controllerCounter.prototype.init = function init() {
+controllerCounter.prototype.init = function() {
   this.viewCounter.onClick = this.onClick.bind(this)
-  this.modelCounter.getCounter('', this.showCounter.bind(this))
+  this.modelCounter.getCounter(null, this.showCounter.bind(this))
 }
 
-controllerCounter.prototype.onClick = function onClick(e) {
+controllerCounter.prototype.onClick = function(e) {
   const target = e.currentTarget.dataset.type
   this.modelCounter.getCounter(target, this.showCounter.bind(this))
 }
 
-controllerCounter.prototype.showCounter = function showCounter(modelData) {
+controllerCounter.prototype.showCounter = function(modelData) {
   const viewModel = {
     counter: modelData
   }
-
-
   this.viewCounter.render(viewModel)
 }
 
